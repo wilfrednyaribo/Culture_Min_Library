@@ -13,18 +13,13 @@ if(!isset($conn)){
                         <label for="" class="control-label">Subject</label>
                         <input type="text" name="subject" class="form-control form-control-sm" required value="<?php echo isset($subject) ? $subject : '' ?>">
                     </div>
+
+                    <!-- Autofilled User Field -->
                     <div class="form-group">
                         <label for="" class="control-label">User</label>
-                        <select name="customer_id" id="customer_id" class="custom-select custom-select-sm select2">
-                            <option value=""></option>
-                        <?php
-                            $department = $conn->query("SELECT *, concat(lastname,', ',firstname,' ',middlename) as name FROM customers order by concat(lastname,', ',firstname,' ',middlename) asc");
-                            while($row = $department->fetch_assoc()):
-                        ?>
-                            <option value="<?php echo $row['id'] ?>" <?php echo isset($customer_id) && $customer_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['name']) ?></option>
-                        <?php endwhile; ?>
-                        </select>
+                        <input type="text" name="user" class="form-control form-control-sm" required value="<?php echo isset($_SESSION['login_firstname']) && isset($_SESSION['login_lastname']) ? ucwords($_SESSION['login_firstname'].' '.$_SESSION['login_lastname']) : ''; ?>" readonly>
                     </div>
+
                     <div class="form-group">
                         <label for="" class="control-label">Office</label>
                         <select name="department_id" id="department_id" class="custom-select custom-select-sm select2">
@@ -38,6 +33,7 @@ if(!isset($conn)){
                         </select>
                     </div>
                 </div>
+
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="control-label">Description</label>
@@ -55,26 +51,26 @@ if(!isset($conn)){
 </div>
 <script>
     $('#manage_ticket').submit(function(e){
-        e.preventDefault()
-        $('input').removeClass("border-danger")
-        start_load()
-        $('#msg').html('')
+        e.preventDefault();
+        $('input').removeClass("border-danger");
+        start_load();
+        $('#msg').html('');
         $.ajax({
-            url:'ajax.php?action=save_ticket',
+            url: 'ajax.php?action=save_ticket',
             data: new FormData($(this)[0]),
             cache: false,
             contentType: false,
             processData: false,
             method: 'POST',
             type: 'POST',
-            success:function(resp){
+            success: function(resp){
                 if(resp == 1){
-                    alert_toast('Data successfully saved.',"success");
+                    alert_toast('Data successfully saved.', "success");
                     setTimeout(function(){
-                        location.replace('index.php?page=ticket_list')
-                    },750)
+                        location.replace('index.php?page=ticket_list');
+                    }, 750);
                 }
             }
-        })
-    })
+        });
+    });
 </script>
