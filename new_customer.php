@@ -24,7 +24,7 @@
               <input type="text" name="contact" class="form-control form-control-sm" required value="<?php echo isset($contact) ? $contact : '' ?>">
             </div> -->
             <div class="form-group">
-              <label for="address" class="control-label">Location</label>
+              <label for="address" class="control-label">Office</label>
               <textarea name="address" class="form-control" rows="4" required><?php echo isset($address) ? $address : '' ?></textarea>
             </div>
           </div>

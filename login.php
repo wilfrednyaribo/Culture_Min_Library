@@ -10,61 +10,126 @@ include('./db_connect.php');
   <title>Login | ICT Ticketing Support System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <?php include('./header.php'); ?>
-  <?php 
-  if(isset($_SESSION['login_id']))
-    header("location:index.php?page=home");
-  ?>
   <style>
     body {
-		background: linear-gradient(to right, #a18cd1, #fbc2eb);
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+    .kenyan-stripes {
+      width: 100%; /* Ensures it spans full width */
+      height: 20px; /* Height of the stripes */
     }
-    .card {
+
+    .kenyan-stripes div {
+      display: block;
+      width: 100%;
+      height: 5px;
+    }
+
+    .black { background-color: black; }
+    .red { background-color: red; }
+    .green { background-color: green; }
+    .white { background-color: white; }
+
+    .login-card {
       border-radius: 1rem;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      background-color: #fff;
     }
-    .form-label {
-      font-weight: bold;
-    }
+
     .login-title {
       color: white;
       text-align: center;
+      margin-top: 40px;
       margin-bottom: 20px;
+      font-size: 2.5rem;
     }
+
+    .login-title span {
+      font-weight: bold;
+    }
+
     .form-control {
       padding-left: 40px;
     }
+
+    .input-group {
+      position: relative;
+    }
+
     .icon-input {
       position: absolute;
       left: 10px;
       top: 50%;
       transform: translateY(-50%);
     }
-    .input-group {
-      position: relative;
+
+    .btn-primary {
+      background-color: #4e73df;
+      border-color: #4e73df;
+    }
+
+    .btn-primary:hover {
+      background-color: #2e59d9;
+      border-color: #2e59d9;
+    }
+
+    .form-select {
+      padding-left: 40px;
+    }
+
+    .input-group-text i {
+      color: #6c757d;
     }
   </style>
+  <?php include('./header.php'); ?>
+  <?php 
+  if(isset($_SESSION['login_id']))
+    header("location:index.php?page=home");
+  ?>
 </head>
 <body>
 
+  <!-- Kenyan Flag Strips at the top -->
+  <div class="kenyan-stripes">
+    <div class="black"></div>
+    <div class="red"></div>
+    <div class="green"></div>
+    <div class="white"></div>
+  </div>
 
-  <div class="container">
+  <!-- Logo and title container -->
+<div class="container text-center">
+  <!-- Logo -->
+  <img src="images/State-department-logo.png" alt="System Logo" class="mb-3" style="max-height: 100px;">
+</div>
+
+<!-- Full-width Kenyan flag stripes -->
+<div class="kenyan-stripes">
+  <div class="black"></div>
+  <div class="red"></div>
+  <div class="green"></div>
+  <div class="white"></div>
+</div>
+
+<!-- Title container -->
+<div class="container text-center">
   <h1 class="login-title">
-  <span style="color: white;">ICT </span>
-  <span style="color: red;">Ticketing </span>
-  <span style="color: black;">Support </span>
-  <span style="color: green;">System </span>
-</h1>
+    <span style="color: white;">ICT </span>
+    <span style="color: red;">Ticketing </span>
+    <span style="color: black;">Support </span>
+    <span style="color: green;">System </span>
+  </h1>
+
+
 
     <div class="row justify-content-center">
-      <div class="col-md-5">
-        <div class="card p-4">
+      <div class="col-md-6">
+        <div class="card login-card p-4">
           <div class="card-body">
             <form id="login-form">
               <div class="mb-3 input-group">
@@ -120,11 +185,6 @@ include('./db_connect.php');
         }
       });
     });
-
-
-    
-
-
   </script>
 </body>
 </html>

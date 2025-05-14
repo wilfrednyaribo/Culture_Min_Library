@@ -28,7 +28,7 @@
             <a href="#" class="nav-link nav-edit_customer">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                User
+                Client
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -36,7 +36,7 @@
               <li class="nav-item">
                 <a href="./index.php?page=new_customer" class="nav-link nav-new_customer tree-item">
                   <i class="fas fa-angle-right nav-icon"></i>
-                  <p>Add New User</p>
+                  <p>Add New Client</p>
                 </a>
 
 

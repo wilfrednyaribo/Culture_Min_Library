@@ -1,4 +1,4 @@
-include code for the above image in the code below:<!-- Navbar -->
+<!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-primary navbar-dark ">
     <!-- Left navbar links -->
     <ul class="navbar-nav">

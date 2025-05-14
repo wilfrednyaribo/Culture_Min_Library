@@ -9,6 +9,7 @@
 						<th>Name</th>
 						<!-- <th>Contact #</th> -->
 						<th>Address</th>
+						<th>Office</th>
 						<th>Email</th>
 						<th>Action</th>
 					</tr>
