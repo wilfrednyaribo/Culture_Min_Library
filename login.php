@@ -7,21 +7,20 @@ include('./db_connect.php');
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Login | ICT Ticketing Support System</title>
+  <title>Login | CULTURE MINILIBRARY SYSTEM</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
     body {
-  background-color: #ffffff;
-  height: 100vh;
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+      background-color: #ffffff;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
     .kenyan-stripes {
-      width: 100%; /* Ensures it spans full width */
-      height: 20px; /* Height of the stripes */
+      width: 100%;
+      height: 20px;
     }
 
     .kenyan-stripes div {
@@ -78,18 +77,14 @@ include('./db_connect.php');
       border-color: #2e59d9;
     }
 
-    .form-select {
-      padding-left: 40px;
-    }
-
     .input-group-text i {
       color: #6c757d;
     }
   </style>
   <?php include('./header.php'); ?>
   <?php 
-  if(isset($_SESSION['login_id']))
-    header("location:index.php?page=home");
+    if(isset($_SESSION['login_id']))
+      header("location:index.php?page=home");
   ?>
 </head>
 <body>
@@ -103,29 +98,26 @@ include('./db_connect.php');
   </div>
 
   <!-- Logo and title container -->
-<div class="container text-center">
-  <!-- Logo -->
-  <img src="images/State-department-logo.png" alt="System Logo" class="mb-3" style="max-height: 100px;">
-</div>
+  <div class="container text-center">
+    <img src="images/State-department-logo.png" alt="System Logo" class="mb-3" style="max-height: 100px;">
+  </div>
 
-<!-- Full-width Kenyan flag stripes -->
-<div class="kenyan-stripes">
-  <div class="black"></div>
-  <div class="red"></div>
-  <div class="green"></div>
-  <div class="white"></div>
-</div>
+  <!-- Full-width Kenyan flag stripes -->
+  <div class="kenyan-stripes">
+    <div class="black"></div>
+    <div class="red"></div>
+    <div class="green"></div>
+    <div class="white"></div>
+  </div>
 
-<!-- Title container -->
-<div class="container text-center">
-  <h1 class="login-title">
-    <span style="color: white;">ICT </span>
-    <span style="color: red;">Ticketing </span>
-    <span style="color: black;">Support </span>
-    <span style="color: green;">System </span>
-  </h1>
-
-
+  <!-- Title container -->
+  <div class="container text-center">
+    <h1 class="login-title">
+      <!-- <span style="color: white;">ICT </span>
+      <span style="color: red;">Ticketing </span>
+      <span style="color: black;">Support </span> -->
+      <span style="color: green;">Culture MiniLibrary System </span>
+    </h1>
 
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -140,14 +132,10 @@ include('./db_connect.php');
                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
               </div>
-              <div class="mb-3">
-                <label for="type" class="form-label">Login As</label>
-                <select name="type" class="form-select" required>
-                  <option value="3">Client</option>
-                  <option value="2">Staff</option>
-                  <option value="1">Admin</option>
-                </select>
-              </div>
+              
+              <!-- Hidden field to submit type = 1 (Admin) -->
+              <input type="hidden" name="type" value="1">
+
               <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
           </div>
