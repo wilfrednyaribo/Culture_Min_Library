@@ -5,31 +5,35 @@ include 'db_connect.php';
 if (isset($_GET['return_id'])) {
     $return_id = (int)$_GET['return_id'];
 
-    // Update status and return date
     $conn->query("UPDATE book_issues SET return_date = CURDATE(), status = 'Returned' WHERE id = $return_id");
 
-    // Update book quantity
     $conn->query("UPDATE bookpreset 
                   SET quantity = quantity + 1 
                   WHERE book_id = (SELECT book_id FROM book_issues WHERE id = $return_id)");
 
-    echo "<script>alert('Book marked as returned.'); window.location.href='borrowed_books.php';</script>";
+    $redirect_url = basename($_SERVER['PHP_SELF']);
+    if (!empty($_GET['search_id'])) {
+        $redirect_url .= '?search_id=' . urlencode($_GET['search_id']);
+    }
+
+    echo "<script>
+        alert('Book marked as returned.');
+        window.location.href = '$redirect_url';
+    </script>";
     exit;
 }
 
-// Search logic
 $search_id = '';
 $where = '';
 if (isset($_GET['search_id'])) {
     $search_id = trim($_GET['search_id']);
-    if (preg_match('/^\d{8}$/', $search_id)) {
+    if (preg_match('/^\\d{8}$/', $search_id)) {
         $where = "WHERE b.borrower_id = '$search_id'";
     } else if ($search_id !== '') {
         echo "<script>alert('Please enter a valid 8-digit Borrower ID.');</script>";
     }
 }
 
-// Fetch all borrowed books (with optional search)
 $borrowed = $conn->query("
     SELECT bi.*, 
            bp.book_title, bp.book_genre, bp.publisher, bp.year_published,
@@ -40,6 +44,12 @@ $borrowed = $conn->query("
     $where
     ORDER BY bi.id DESC
 ");
+
+$genres = [];
+$genre_result = $conn->query("SELECT DISTINCT book_genre FROM bookpreset ORDER BY book_genre ASC");
+while ($g = $genre_result->fetch_assoc()) {
+    $genres[] = $g['book_genre'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -60,45 +70,38 @@ $borrowed = $conn->query("
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">All Borrowed Books</h3>
         <div class="d-flex align-items-center">
-            <!-- Print Button -->
-            <button type="button" class="btn btn-secondary mr-2" onclick="window.print()">
+            <!-- Trigger Print Modal -->
+            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#printModal">
                 <i class="fas fa-print"></i> Print
             </button>
+
+            <!-- Search Form -->
             <form class="form-inline mb-0" method="get" action="borrowed_books.php">
                 <input type="text" name="search_id" class="form-control mr-2" placeholder="Search Borrower ID" maxlength="8" pattern="\d{8}" value="<?= htmlspecialchars($search_id) ?>">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-info">
                     <i class="fas fa-search"></i> Search
                 </button>
             </form>
         </div>
     </div>
-    <style>
-        @media print {
-            .btn, .fa-print, .fa-search, .form-inline, .text-muted, .badge-success, .badge-warning, .btn-success, .btn-primary, .btn-outline-secondary {
-                display: none !important;
-            }
-            th:last-child, td:last-child {
-                display: none !important;
-            }
-        }
-    </style>
+
     <table class="table table-bordered table-striped table-sm">
         <thead class="thead-dark">
-            <tr>
-                <th>#</th>
-                <th>Book ID</th>
-                <th>Book Title</th>
-                <th>Genre</th>
-                <th>Publisher</th>
-                <th>Year</th>
-                <th>Borrower ID</th>
-                <th>Borrower Name</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
-                <th>Return Date</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Book ID</th>
+            <th>Book Title</th>
+            <th>Genre</th>
+            <th>Publisher</th>
+            <th>Year</th>
+            <th>Borrower ID</th>
+            <th>Borrower Name</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
         </thead>
         <tbody>
         <?php $i = 1; while ($row = $borrowed->fetch_assoc()): ?>
@@ -123,10 +126,10 @@ $borrowed = $conn->query("
                 </td>
                 <td>
                     <?php if ($row['status'] === 'Issued'): ?>
-                        <a href="?return_id=<?= $row['id'] ?>"
+                        <a href="borrowed_books.php?return_id=<?= $row['id'] ?>&search_id=<?= urlencode($search_id) ?>"
                            class="btn btn-sm btn-success"
                            onclick="return confirm('Mark this book as returned?')">
-                           Return
+                            Return
                         </a>
                     <?php else: ?>
                         <span class="text-muted">Returned</span>
@@ -137,5 +140,45 @@ $borrowed = $conn->query("
         </tbody>
     </table>
 </div>
+
+<!-- Print Modal -->
+<div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form method="get" action="print_borrowed_books.php" target="_blank" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="printModalLabel">Select Print Range</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>From Date</label>
+          <input type="date" name="from_date" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>To Date</label>
+          <input type="date" name="to_date" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Genre</label>
+          <select name="genre" class="form-control">
+            <option value="">All Genres</option>
+            <?php foreach ($genres as $genre): ?>
+                <option value="<?= htmlspecialchars($genre) ?>"><?= htmlspecialchars($genre) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Print</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -80,6 +80,31 @@ include('./db_connect.php');
     .input-group-text i {
       color: #6c757d;
     }
+    .loginimage{
+      background: url('images/login_image.jpg') center center/cover no-repeat;
+      min-height: 77%;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      padding: 40px 20px;
+      margin: 5px; 
+      border-radius: 20px; 
+      opacity: 1;
+    }
+    .container h1 span{
+      
+    }
+    .logintext{
+      color: red;
+      opacity: 1;
+      z-index: 1000;
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -150%); /* moves text up relative to center of login box */
+      text-align: center;
+    }
+
   </style>
   <?php include('./header.php'); ?>
   <?php 
@@ -111,12 +136,13 @@ include('./db_connect.php');
   </div>
 
   <!-- Title container -->
+  <div class="loginimage">
   <div class="container text-center">
     <h1 class="login-title">
       <!-- <span style="color: white;">ICT </span>
       <span style="color: red;">Ticketing </span>
       <span style="color: black;">Support </span> -->
-      <span style="color: green;">Culture MiniLibrary System </span>
+      <span class="logintext">Culture MiniLibrary System </span>
     </h1>
 
     <div class="row justify-content-center">
@@ -142,6 +168,7 @@ include('./db_connect.php');
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Bootstrap JS and dependencies -->
